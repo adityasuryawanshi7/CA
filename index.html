@@ -5,146 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
     <style>
-    /* Dark Theme with Improved Colors */
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #121212; /* Darker background */
-        color: #e0e0e0; /* Light gray text */
-        margin: 0;
-        padding: 20px;
-    }
-
-    .container {
-        max-width: 700px;
-        margin: 0 auto;
-        background-color: #1f1f1f; /* Darker container background */
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    h1, h2 {
-        text-align: center;
-        color: #64ffda; /* Light cyan color */
-        margin-bottom: 25px;
-    }
-
-    h2 span {
-        color: #00bfae; /* A slightly different cyan */
-    }
-
-    form, .balance {
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #b0bec5; /* Light grayish blue for labels */
-    }
-
-    input, select, button {
-        width: 100%;
-        padding: 12px;
-        margin-bottom: 10px;
-        box-sizing: border-box;
-        border-radius: 8px;
-        border: 1px solid #7f8c8d;
-        background-color: #333; /* Dark input fields */
-        color: #e0e0e0; /* Light gray text */
-        outline: none;
-    }
-
-    input:focus, select:focus, button:focus {
-        border-color: #64ffda; /* Highlight color */
-        background-color: #444;
-    }
-
-    button {
-        background-color: #64ffda; /* Light cyan for buttons */
-        color: #121212; /* Dark text on button */
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        padding: 12px;
-    }
-
-    button:hover {
-        background-color: #00bfae; /* Darker cyan on hover */
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        background-color: #121212; /* Dark table background */
-        max-height: 300px; /* Set max height for scrolling */
-        overflow-y: auto; /* Make it scrollable */
-        display: block;
-    }
-
-    thead {
-        background-color: #64ffda; /* Light cyan header */
-    }
-
-    th {
-        color: #121212;
-        padding: 12px;
-        text-align: center;
-    }
-
-    td {
-        padding: 12px;
-        text-align: center;
-        border-top: 1px solid #444;
-    }
-
-    td button {
-        background-color: #e74c3c; /* Red color for delete button */
-        color: #ffffff;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        padding: 8px 16px;
-        transition: all 0.3s ease;
-        font-weight: bold;
-    }
-
-    td button:hover {
-        background-color: #c0392b; /* Darker red on hover */
-        transform: scale(1.1); /* Slight grow effect */
-    }
-
-    /* Income Type: Green Text */
-    tr.income td:nth-child(2), tr.income td:nth-child(3), tr.income td:nth-child(4), tr.income td:nth-child(5) {
-        color: #2ecc71; /* Green for income text */
-    }
-
-    /* Expense Type: Red Text */
-    tr.expense td:nth-child(2), tr.expense td:nth-child(3), tr.expense td:nth-child(4), tr.expense td:nth-child(5) {
-        color: #e74c3c; /* Red for expense text */
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .container {
-            padding: 15px;
+        /* Dark Theme with Improved Colors */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212; /* Darker background */
+            color: #e0e0e0; /* Light gray text */
+            margin: 0;
+            padding: 20px;
         }
 
-        table {
-            font-size: 14px;
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #1f1f1f; /* Darker container background */
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #64ffda; /* Light cyan color */
+            margin-bottom: 25px;
+        }
+
+        h2 span {
+            color: #00bfae; /* A slightly different cyan */
+        }
+
+        form, .balance {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #b0bec5; /* Light grayish blue for labels */
         }
 
         input, select, button {
-            padding: 10px;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            border: 1px solid #7f8c8d;
+            background-color: #333; /* Dark input fields */
+            color: #e0e0e0; /* Light gray text */
+            outline: none;
         }
-    }
+
+        input:focus, select:focus, button:focus {
+            border-color: #64ffda; /* Highlight color */
+            background-color: #444;
+        }
+
+        button {
+            background-color: #64ffda; /* Light cyan for buttons */
+            color: #121212; /* Dark text on button */
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            padding: 12px;
+        }
+
+        button:hover {
+            background-color: #00bfae; /* Darker cyan on hover */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #121212; /* Dark table background */
+            max-height: 300px; /* Set max height for scrolling */
+            overflow-y: auto; /* Make it scrollable */
+            display: block;
+        }
+
+        thead {
+            background-color: #64ffda; /* Light cyan header */
+        }
+
+        th {
+            color: #121212;
+            padding: 12px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-top: 1px solid #444;
+        }
+
+        td button {
+            background-color: #e74c3c; /* Red color for delete button */
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        td button:hover {
+            background-color: #c0392b; /* Darker red on hover */
+            transform: scale(1.1); /* Slight grow effect */
+        }
+
+        /* Income Type: Green Text */
+        tr.income td:nth-child(2), tr.income td:nth-child(3), tr.income td:nth-child(4), tr.income td:nth-child(5) {
+            color: #2ecc71; /* Green for income text */
+        }
+
+        /* Expense Type: Red Text */
+        tr.expense td:nth-child(2), tr.expense td:nth-child(3), tr.expense td:nth-child(4), tr.expense td:nth-child(5) {
+            color: #e74c3c; /* Red for expense text */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            input, select, button {
+                padding: 10px;
+            }
+        }
 
     </style>
 </head>
@@ -192,203 +192,162 @@
     </div>
     
     <select id="account-select">
-    <option value="Account 1">2005 (P-pay)</option>
-    <option value="Account 2">7907 (G-pay)</option>
-</select>
- <script>
-    let remainingBalanceAccount1 = 0;
-    let remainingBalanceAccount2 = 0;
-    let currentAccount = 'Account 1'; // Default selected account
+        <option value="Account 1">7907 (G-pay)</option>
+        <option value="Account 2">2005 (P-pay)</option>
+    </select>
 
-    // On page load, load balances and transactions for selected account
-    document.addEventListener("DOMContentLoaded", () => {
-        remainingBalanceAccount1 = parseFloat(localStorage.getItem("remainingBalanceAccount1")) || 0;
-        remainingBalanceAccount2 = parseFloat(localStorage.getItem("remainingBalanceAccount2")) || 0;
-        updateBalanceDisplay();
-        loadTransactions();
-    });
+    <script>
+        let remainingBalanceAccount1 = 0;
+        let remainingBalanceAccount2 = 0;
+        let currentAccount = 'Account 1'; // Default selected account
 
-    // Account selection dropdown event
-    document.getElementById("account-select").addEventListener("change", (e) => {
-        currentAccount = e.target.value;
-        updateBalanceDisplay();
-        loadTransactions();
-    });
+        // On page load, load balances and transactions for selected account
+        document.addEventListener("DOMContentLoaded", () => {
+            remainingBalanceAccount1 = parseFloat(localStorage.getItem("remainingBalanceAccount1")) || 0;
+            remainingBalanceAccount2 = parseFloat(localStorage.getItem("remainingBalanceAccount2")) || 0;
+            updateBalanceDisplay();
+            loadTransactions();
+        });
 
-    // Update balance display based on selected account
-    function updateBalanceDisplay() {
-        if (currentAccount === 'Account 1') {
-            document.getElementById("remaining-balance").textContent = remainingBalanceAccount1.toFixed(2);
-        } else {
-            document.getElementById("remaining-balance").textContent = remainingBalanceAccount2.toFixed(2);
-        }
-    }
+        // Account selection dropdown event
+        document.getElementById("account-select").addEventListener("change", (e) => {
+            currentAccount = e.target.value;
+            updateBalanceDisplay();
+            loadTransactions();
+        });
 
-    // Set the initial balance for selected account
-    document.getElementById("set-balance").addEventListener("click", () => {
-        const startingBalance = parseFloat(document.getElementById("starting-balance").value);
-        if (!isNaN(startingBalance)) {
+        // Update balance display based on selected account
+        function updateBalanceDisplay() {
             if (currentAccount === 'Account 1') {
-                remainingBalanceAccount1 = startingBalance;
-                saveRemainingBalance();
+                document.getElementById("remaining-balance").textContent = remainingBalanceAccount1.toFixed(2);
             } else {
-                remainingBalanceAccount2 = startingBalance;
-                saveRemainingBalance();
+                document.getElementById("remaining-balance").textContent = remainingBalanceAccount2.toFixed(2);
             }
-            resetTransactions();
-        } else {
-            alert("Please enter a valid starting balance.");
-        }
-    });
-
-    // Add a transaction
-    document.getElementById("expense-form").addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const type = document.getElementById("type").value;
-        const description = document.getElementById("description").value;
-        const amount = parseFloat(document.getElementById("amount").value);
-        const dateTime = getCurrentDateTime();
-
-        if (!description || isNaN(amount) || amount <= 0) {
-            alert("Please enter valid details!");
-            return;
         }
 
-        // Update balance for the selected account
-        if (currentAccount === 'Account 1') {
-            if (type === "Expense") {
-                remainingBalanceAccount1 -= amount;
+        // Set the initial balance for selected account
+        document.getElementById("set-balance").addEventListener("click", () => {
+            const startingBalance = parseFloat(document.getElementById("starting-balance").value);
+            if (!isNaN(startingBalance)) {
+                if (currentAccount === 'Account 1') {
+                    remainingBalanceAccount1 = startingBalance;
+                    saveRemainingBalance();
+                } else {
+                    remainingBalanceAccount2 = startingBalance;
+                    saveRemainingBalance();
+                }
             } else {
-                remainingBalanceAccount1 += amount;
-            }
-            saveRemainingBalance();
-        } else {
-            if (type === "Expense") {
-                remainingBalanceAccount2 -= amount;
-            } else {
-                remainingBalanceAccount2 += amount;
-            }
-            saveRemainingBalance();
-        }
-
-        const transaction = { dateTime, type, description, amount, balance: (currentAccount === 'Account 1' ? remainingBalanceAccount1 : remainingBalanceAccount2) };
-        saveTransaction(transaction);
-        addTransactionToTable(transaction);
-        resetForm();
-    });
-
-    // Save remaining balance to local storage
-    function saveRemainingBalance() {
-        if (currentAccount === 'Account 1') {
-            localStorage.setItem("remainingBalanceAccount1", remainingBalanceAccount1.toFixed(2));
-        } else {
-            localStorage.setItem("remainingBalanceAccount2", remainingBalanceAccount2.toFixed(2));
-        }
-        updateBalanceDisplay();
-    }
-
-    // Save transaction to local storage
-    function saveTransaction(transaction) {
-        const transactions = getTransactionsFromStorage();
-        transactions.push(transaction);
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-    }
-
-    // Load transactions from local storage
-    function loadTransactions() {
-        const transactions = getTransactionsFromStorage();
-        const transactionList = document.getElementById("transaction-list");
-        transactionList.innerHTML = "";
-        transactions.forEach(transaction => {
-            if (transaction.balance === (currentAccount === 'Account 1' ? remainingBalanceAccount1 : remainingBalanceAccount2)) {
-                addTransactionToTable(transaction);
+                alert("Please enter a valid starting balance.");
             }
         });
-    }
 
-    // Retrieve transactions from local storage
-    function getTransactionsFromStorage() {
-        const transactions = localStorage.getItem("transactions");
-        return transactions ? JSON.parse(transactions) : [];
-    }
+        // Add a transaction
+        document.getElementById("expense-form").addEventListener("submit", function (e) {
+            e.preventDefault();
 
-    // Add transaction to table
-    function addTransactionToTable(transaction) {
-        const transactionList = document.getElementById("transaction-list");
-        const row = document.createElement("tr");
+            const type = document.getElementById("type").value;
+            const description = document.getElementById("description").value;
+            const amount = parseFloat(document.getElementById("amount").value);
+            const dateTime = getCurrentDateTime();
 
-        const typeClass = transaction.type === 'Income' ? 'income' : 'expense';
-        row.classList.add(typeClass);
-
-        row.innerHTML = `
-            <td>${transaction.dateTime}</td>
-            <td>${transaction.type}</td>
-            <td>${transaction.description}</td>
-            <td>${transaction.amount.toFixed(2)}</td>
-            <td>${transaction.balance.toFixed(2)}</td>
-            <td><button onclick="deleteTransaction(this)">Delete</button></td>
-        `;
-
-        transactionList.appendChild(row);
-    }
-
-    // Reset transactions and clear local storage
-    function resetTransactions() {
-        localStorage.setItem("transactions", JSON.stringify([]));
-        document.getElementById("transaction-list").innerHTML = "";
-        saveRemainingBalance();
-    }
-
-    // Delete a transaction
-    function deleteTransaction(button) {
-        const row = button.closest("tr");
-        const type = row.children[1].textContent;
-        const amount = parseFloat(row.children[3].textContent);
-        const currentBalance = parseFloat(row.children[4].textContent);
-
-        const transactions = getTransactionsFromStorage();
-        const updatedTransactions = transactions.filter(transaction => 
-            !(transaction.dateTime === row.children[0].textContent && 
-              transaction.type === type &&
-              transaction.amount === amount));
-        localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
-
-        // Update the remaining balance for the selected account
-        if (currentAccount === 'Account 1') {
-            if (type === 'Income') {
-                remainingBalanceAccount1 -= amount;
-            } else {
-                remainingBalanceAccount1 += amount;
+            if (!description || isNaN(amount) || amount <= 0) {
+                alert("Please enter valid details!");
+                return;
             }
-        } else {
-            if (type === 'Income') {
-                remainingBalanceAccount2 -= amount;
+
+            // Update balance for the selected account
+            if (currentAccount === 'Account 1') {
+                if (type === "Expense") {
+                    remainingBalanceAccount1 -= amount;
+                } else {
+                    remainingBalanceAccount1 += amount;
+                }
+                saveRemainingBalance();
             } else {
-                remainingBalanceAccount2 += amount;
+                if (type === "Expense") {
+                    remainingBalanceAccount2 -= amount;
+                } else {
+                    remainingBalanceAccount2 += amount;
+                }
+                saveRemainingBalance();
             }
+
+            const transaction = { dateTime, type, description, amount, balance: (currentAccount === 'Account 1') ? remainingBalanceAccount1 : remainingBalanceAccount2 };
+            
+            // Add the transaction to the list in localStorage
+            const transactions = JSON.parse(localStorage.getItem(currentAccount)) || [];
+            transactions.push(transaction);
+            localStorage.setItem(currentAccount, JSON.stringify(transactions));
+            
+            // Clear input fields after submission
+            document.getElementById("description").value = '';
+            document.getElementById("amount").value = '';
+
+            // Refresh the transaction list
+            loadTransactions();
+        });
+
+        // Load transactions from localStorage
+        function loadTransactions() {
+            const transactions = JSON.parse(localStorage.getItem(currentAccount)) || [];
+            const transactionList = document.getElementById("transaction-list");
+            transactionList.innerHTML = '';
+
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.classList.add(transaction.type.toLowerCase()); // Add income/expense class
+
+                row.innerHTML = `
+                    <td>${transaction.dateTime}</td>
+                    <td>${transaction.type}</td>
+                    <td>${transaction.description}</td>
+                    <td>${transaction.amount.toFixed(2)}</td>
+                    <td>${transaction.balance.toFixed(2)}</td>
+                    <td><button onclick="deleteTransaction('${transaction.dateTime}')">Delete</button></td>
+                `;
+
+                transactionList.appendChild(row);
+            });
         }
 
-        saveRemainingBalance();
-        loadTransactions();
-    }
+        // Delete a transaction
+        function deleteTransaction(dateTime) {
+            const transactions = JSON.parse(localStorage.getItem(currentAccount)) || [];
+            const updatedTransactions = transactions.filter(transaction => transaction.dateTime !== dateTime);
+            localStorage.setItem(currentAccount, JSON.stringify(updatedTransactions));
 
-    // Get current date and time in DDMMYYYY format
-    function getCurrentDateTime() {
-        const now = new Date();
-        
-        const day = String(now.getDate()).padStart(2, '0');
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const year = now.getFullYear();
+            // Recalculate the remaining balance after deletion
+            if (currentAccount === 'Account 1') {
+                remainingBalanceAccount1 = updatedTransactions.reduce((acc, transaction) => {
+                    return transaction.type === 'Expense' ? acc - transaction.amount : acc + transaction.amount;
+                }, 0);
+                saveRemainingBalance();
+            } else {
+                remainingBalanceAccount2 = updatedTransactions.reduce((acc, transaction) => {
+                    return transaction.type === 'Expense' ? acc - transaction.amount : acc + transaction.amount;
+                }, 0);
+                saveRemainingBalance();
+            }
 
-        return `${day}/${month}/${year}`;
-    }
+            // Refresh the transaction list
+            loadTransactions();
+        }
 
-    // Reset the form fields
-    function resetForm() {
-        document.getElementById("description").value = "";
-        document.getElementById("amount").value = "";
-    }
-</script>
+        // Save the remaining balance to localStorage
+        function saveRemainingBalance() {
+            if (currentAccount === 'Account 1') {
+                localStorage.setItem("remainingBalanceAccount1", remainingBalanceAccount1.toFixed(2));
+            } else {
+                localStorage.setItem("remainingBalanceAccount2", remainingBalanceAccount2.toFixed(2));
+            }
+            updateBalanceDisplay();
+        }
+
+        // Get the current date and time
+        function getCurrentDateTime() {
+            const date = new Date();
+            return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        }
+    </script>
 </body>
 </html>
