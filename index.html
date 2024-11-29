@@ -131,6 +131,37 @@
             color: #e74c3c; /* Red for expense text */
         }
 
+        /* Radio button style */
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .radio-group input[type="radio"] {
+            display: none; /* Hide default radio button appearance */
+        }
+
+        .radio-group label {
+            padding: 10px 20px;
+            background-color: #333;
+            border-radius: 50px; /* Circular pill shape */
+            cursor: pointer;
+            color: #e0e0e0;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .radio-group input[type="radio"]:checked + label {
+            background-color: #64ffda; /* Highlight the selected option */
+            color: #121212;
+        }
+
+        .radio-group label:hover {
+            background-color: #444;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
@@ -145,7 +176,6 @@
                 padding: 10px;
             }
         }
-
     </style>
 </head>
 <body>
@@ -160,10 +190,12 @@
         <form id="expense-form">
             <div class="form-group">
                 <label for="type">Type:</label>
-                <select id="type" required>
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                </select>
+                <div class="radio-group">
+                    <input type="radio" id="income" name="type" value="Income" checked>
+                    <label for="income">Income</label>
+                    <input type="radio" id="expense" name="type" value="Expense">
+                    <label for="expense">Expense</label>
+                </div>
             </div>
             <div class="form-group">
                 <label for="description">Description:</label>
@@ -192,7 +224,7 @@
     </div>
     
     <select id="account-select">
-        <option value="Account 1">7907 (G-pay)</option>
+        <option type="radio" id="income" value="Account 1">7907 (G-pay)</option>
         <option value="Account 2">2005 (P-pay)</option>
     </select>
 
@@ -236,117 +268,98 @@
                     remainingBalanceAccount2 = startingBalance;
                     saveRemainingBalance();
                 }
-            } else {
-                alert("Please enter a valid starting balance.");
-            }
+                resetTransactions();
+                }
         });
 
-        // Add a transaction
-        document.getElementById("expense-form").addEventListener("submit", function (e) {
-            e.preventDefault();
+        // Save remaining balance to localStorage
+        function saveRemainingBalance() {
+            if (currentAccount === 'Account 1') {
+                localStorage.setItem("remainingBalanceAccount1", remainingBalanceAccount1);
+            } else {
+                localStorage.setItem("remainingBalanceAccount2", remainingBalanceAccount2);
+            }
+            updateBalanceDisplay();
+        }
 
-            const type = document.getElementById("type").value;
+        // Reset transactions when setting a new balance
+        function resetTransactions() {
+            document.getElementById("transaction-list").innerHTML = '';
+            localStorage.setItem(currentAccount + "Transactions", JSON.stringify([]));
+        }
+
+        // Add transaction to the table and update balance
+        document.getElementById("expense-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const type = document.querySelector('input[name="type"]:checked').value;
             const description = document.getElementById("description").value;
             const amount = parseFloat(document.getElementById("amount").value);
-            const dateTime = getCurrentDateTime();
 
-            if (!description || isNaN(amount) || amount <= 0) {
-                alert("Please enter valid details!");
-                return;
-            }
+            if (description && !isNaN(amount)) {
+                let transaction = {
+                    date: new Date().toLocaleString(),
+                    type: type,
+                    description: description,
+                    amount: amount,
+                    remainingBalance: currentAccount === 'Account 1' ? remainingBalanceAccount1 : remainingBalanceAccount2
+                };
 
-            // Update balance for the selected account
-            if (currentAccount === 'Account 1') {
-                if (type === "Expense") {
-                    remainingBalanceAccount1 -= amount;
-                } else {
-                    remainingBalanceAccount1 += amount;
+                // Update the balance
+                if (type === 'Income') {
+                    if (currentAccount === 'Account 1') {
+                        remainingBalanceAccount1 += amount;
+                    } else {
+                        remainingBalanceAccount2 += amount;
+                    }
+                } else if (type === 'Expense') {
+                    if (currentAccount === 'Account 1') {
+                        remainingBalanceAccount1 -= amount;
+                    } else {
+                        remainingBalanceAccount2 -= amount;
+                    }
                 }
+
+                // Save updated balance
                 saveRemainingBalance();
-            } else {
-                if (type === "Expense") {
-                    remainingBalanceAccount2 -= amount;
-                } else {
-                    remainingBalanceAccount2 += amount;
-                }
-                saveRemainingBalance();
+
+                // Add the transaction to the list
+                let transactions = JSON.parse(localStorage.getItem(currentAccount + "Transactions")) || [];
+                transactions.push(transaction);
+                localStorage.setItem(currentAccount + "Transactions", JSON.stringify(transactions));
+
+                loadTransactions();
             }
-
-            const transaction = { dateTime, type, description, amount, balance: (currentAccount === 'Account 1') ? remainingBalanceAccount1 : remainingBalanceAccount2 };
-            
-            // Add the transaction to the list in localStorage
-            const transactions = JSON.parse(localStorage.getItem(currentAccount)) || [];
-            transactions.push(transaction);
-            localStorage.setItem(currentAccount, JSON.stringify(transactions));
-            
-            // Clear input fields after submission
-            document.getElementById("description").value = '';
-            document.getElementById("amount").value = '';
-
-            // Refresh the transaction list
-            loadTransactions();
         });
 
         // Load transactions from localStorage
         function loadTransactions() {
-            const transactions = JSON.parse(localStorage.getItem(currentAccount)) || [];
+            let transactions = JSON.parse(localStorage.getItem(currentAccount + "Transactions")) || [];
             const transactionList = document.getElementById("transaction-list");
             transactionList.innerHTML = '';
 
-            transactions.forEach(transaction => {
-                const row = document.createElement('tr');
-                row.classList.add(transaction.type.toLowerCase()); // Add income/expense class
+            transactions.forEach((transaction, index) => {
+                const row = document.createElement("tr");
+                row.classList.add(transaction.type.toLowerCase()); // 'income' or 'expense'
 
                 row.innerHTML = `
-                    <td>${transaction.dateTime}</td>
+                    <td>${transaction.date}</td>
                     <td>${transaction.type}</td>
                     <td>${transaction.description}</td>
                     <td>${transaction.amount.toFixed(2)}</td>
-                    <td>${transaction.balance.toFixed(2)}</td>
-                    <td><button onclick="deleteTransaction('${transaction.dateTime}')">Delete</button></td>
+                    <td>${transaction.remainingBalance.toFixed(2)}</td>
+                    <td><button onclick="deleteTransaction(${index})">Delete</button></td>
                 `;
 
                 transactionList.appendChild(row);
             });
         }
 
-        // Delete a transaction
-        function deleteTransaction(dateTime) {
-            const transactions = JSON.parse(localStorage.getItem(currentAccount)) || [];
-            const updatedTransactions = transactions.filter(transaction => transaction.dateTime !== dateTime);
-            localStorage.setItem(currentAccount, JSON.stringify(updatedTransactions));
-
-            // Recalculate the remaining balance after deletion
-            if (currentAccount === 'Account 1') {
-                remainingBalanceAccount1 = updatedTransactions.reduce((acc, transaction) => {
-                    return transaction.type === 'Expense' ? acc - transaction.amount : acc + transaction.amount;
-                }, 0);
-                saveRemainingBalance();
-            } else {
-                remainingBalanceAccount2 = updatedTransactions.reduce((acc, transaction) => {
-                    return transaction.type === 'Expense' ? acc - transaction.amount : acc + transaction.amount;
-                }, 0);
-                saveRemainingBalance();
-            }
-
-            // Refresh the transaction list
+        // Delete transaction
+        function deleteTransaction(index) {
+            let transactions = JSON.parse(localStorage.getItem(currentAccount + "Transactions"));
+            transactions.splice(index, 1);
+            localStorage.setItem(currentAccount + "Transactions", JSON.stringify(transactions));
             loadTransactions();
-        }
-
-        // Save the remaining balance to localStorage
-        function saveRemainingBalance() {
-            if (currentAccount === 'Account 1') {
-                localStorage.setItem("remainingBalanceAccount1", remainingBalanceAccount1.toFixed(2));
-            } else {
-                localStorage.setItem("remainingBalanceAccount2", remainingBalanceAccount2.toFixed(2));
-            }
-            updateBalanceDisplay();
-        }
-
-        // Get the current date and time
-        function getCurrentDateTime() {
-            const date = new Date();
-            return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
         }
     </script>
 </body>
