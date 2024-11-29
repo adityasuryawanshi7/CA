@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+    /* Dark Theme with Improved Colors */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #121212; /* Darker background */
+        color: #e0e0e0; /* Light gray text */
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 0 auto;
+        background-color: #1f1f1f; /* Darker container background */
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    h1, h2 {
+        text-align: center;
+        color: #64ffda; /* Light cyan color */
+        margin-bottom: 25px;
+    }
+
+    h2 span {
+        color: #00bfae; /* A slightly different cyan */
+    }
+
+    form, .balance {
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #b0bec5; /* Light grayish blue for labels */
+    }
+
+    input, select, button {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        border-radius: 8px;
+        border: 1px solid #7f8c8d;
+        background-color: #333; /* Dark input fields */
+        color: #e0e0e0; /* Light gray text */
+        outline: none;
+    }
+
+    input:focus, select:focus, button:focus {
+        border-color: #64ffda; /* Highlight color */
+        background-color: #444;
+    }
+
+    button {
+        background-color: #64ffda; /* Light cyan for buttons */
+        color: #121212; /* Dark text on button */
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        padding: 12px;
+    }
+
+    button:hover {
+        background-color: #00bfae; /* Darker cyan on hover */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #121212; /* Dark table background */
+        max-height: 300px; /* Set max height for scrolling */
+        overflow-y: auto; /* Make it scrollable */
+        display: block;
+    }
+
+    thead {
+        background-color: #64ffda; /* Light cyan header */
+    }
+
+    th {
+        color: #121212;
+        padding: 12px;
+        text-align: center;
+    }
+
+    td {
+        padding: 12px;
+        text-align: center;
+        border-top: 1px solid #444;
+    }
+
+    td button {
+        background-color: #e74c3c; /* Red color for delete button */
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        padding: 8px 16px;
+        transition: all 0.3s ease;
+        font-weight: bold;
+    }
+
+    td button:hover {
+        background-color: #c0392b; /* Darker red on hover */
+        transform: scale(1.1); /* Slight grow effect */
+    }
+
+    /* Income Type: Green Text */
+    tr.income td:nth-child(2), tr.income td:nth-child(3), tr.income td:nth-child(4), tr.income td:nth-child(5) {
+        color: #2ecc71; /* Green for income text */
+    }
+
+    /* Expense Type: Red Text */
+    tr.expense td:nth-child(2), tr.expense td:nth-child(3), tr.expense td:nth-child(4), tr.expense td:nth-child(5) {
+        color: #e74c3c; /* Red for expense text */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        table {
+            font-size: 14px;
+        }
+
+        input, select, button {
+            padding: 10px;
+        }
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Expense & Income Tracker</h1>
+        <div class="balance">
+            <label for="starting-balance">Starting Balance:</label>
+            <input type="number" id="starting-balance" placeholder="Enter starting balance" />
+            <button id="set-balance">Set Balance</button>
+            <h2>Remaining Balance: <span id="remaining-balance">0.00</span></h2>
+        </div>
+        <form id="expense-form">
+            <div class="form-group">
+                <label for="type">Type:</label>
+                <select id="type" required>
+                    <option value="Income">Income</option>
+                    <option value="Expense">Expense</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input type="text" id="description" placeholder="Enter description" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" placeholder="Enter amount" required>
+            </div>
+            <button type="submit">Add</button>
+        </form>
+        <h2>Transaction List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Remaining Balance</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="transaction-list"></tbody>
+        </table>
+    </div>
+ <script>
+    let remainingBalance = 0;
+
+    // On page load, load remaining balance and transactions
+    document.addEventListener("DOMContentLoaded", () => {
+        remainingBalance = parseFloat(localStorage.getItem("remainingBalance")) || 0;
+        document.getElementById("remaining-balance").textContent = remainingBalance.toFixed(2);
+        loadTransactions();
+    });
+
+    // Set the initial balance
+    document.getElementById("set-balance").addEventListener("click", () => {
+        const startingBalance = parseFloat(document.getElementById("starting-balance").value);
+        if (!isNaN(startingBalance)) {
+            remainingBalance = startingBalance;
+            saveRemainingBalance();
+            resetTransactions();
+        } else {
+            alert("Please enter a valid starting balance.");
+        }
+    });
+
+    // Add a transaction
+    document.getElementById("expense-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const type = document.getElementById("type").value;
+        const description = document.getElementById("description").value;
+        const amount = parseFloat(document.getElementById("amount").value);
+        const dateTime = getCurrentDateTime();
+
+        if (!description || isNaN(amount) || amount <= 0) {
+            alert("Please enter valid details!");
+            return;
+        }
+
+        if (type === "Expense") {
+            remainingBalance -= amount;
+        } else {
+            remainingBalance += amount;
+        }
+
+        const transaction = { dateTime, type, description, amount, balance: remainingBalance };
+        saveTransaction(transaction);
+        addTransactionToTable(transaction);
+        saveRemainingBalance();
+
+        document.getElementById("description").value = "";
+        document.getElementById("amount").value = "";
+    });
+
+    // Save remaining balance to local storage
+    function saveRemainingBalance() {
+        localStorage.setItem("remainingBalance", remainingBalance.toFixed(2));
+        document.getElementById("remaining-balance").textContent = remainingBalance.toFixed(2);
+    }
+
+    // Save transaction to local storage
+    function saveTransaction(transaction) {
+        const transactions = getTransactionsFromStorage();
+        transactions.push(transaction);
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+    }
+
+    // Load transactions from local storage
+    function loadTransactions() {
+        const transactions = getTransactionsFromStorage();
+        const transactionList = document.getElementById("transaction-list");
+        transactionList.innerHTML = "";
+        transactions.forEach(transaction => addTransactionToTable(transaction));
+    }
+
+    // Retrieve transactions from local storage
+    function getTransactionsFromStorage() {
+        const transactions = localStorage.getItem("transactions");
+        return transactions ? JSON.parse(transactions) : [];
+    }
+
+    // Add transaction to table
+    function addTransactionToTable(transaction) {
+        const transactionList = document.getElementById("transaction-list");
+        const row = document.createElement("tr");
+
+        // Apply the income or expense class to the whole row
+        const typeClass = transaction.type === 'Income' ? 'income' : 'expense';
+        row.classList.add(typeClass);
+
+        row.innerHTML = `
+           <td>${transaction.dateTime}</td>
+            <td>${transaction.type}</td>
+            <td>${transaction.description}</td>
+            <td>${transaction.amount.toFixed(2)}</td>
+            <td>${transaction.balance.toFixed(2)}</td>
+            <td><button onclick="deleteTransaction(this)">Delete</button></td>
+        `;
+
+        transactionList.appendChild(row);
+    }
+
+    // Reset transactions and clear local storage
+    function resetTransactions() {
+        localStorage.setItem("transactions", JSON.stringify([]));
+        document.getElementById("transaction-list").innerHTML = "";
+        saveRemainingBalance();
+    }
+
+    // Delete a transaction
+    function deleteTransaction(button) {
+        const row = button.closest("tr");
+        const type = row.children[1].textContent;
+        const amount = parseFloat(row.children[3].textContent);
+        const currentBalance = parseFloat(row.children[4].textContent);
+
+        // Remove the transaction from local storage
+        const transactions = getTransactionsFromStorage();
+        const updatedTransactions = transactions.filter(transaction => 
+            !(transaction.dateTime === row.children[0].textContent && 
+              transaction.type === type &&
+              transaction.amount === amount));
+        localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
+
+        // Update the remaining balance
+        if (type === 'Income') {
+            remainingBalance -= amount;
+        } else {
+            remainingBalance += amount;
+        }
+
+        saveRemainingBalance();
+        loadTransactions();
+    }
+
+    // Get current date and time in DDMMYYYY format
+    function getCurrentDateTime() {
+        const now = new Date();
+        
+        // Get the day, month, and year
+        const day = String(now.getDate()).padStart(2, '0'); // Adds leading zero if necessary
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so we add 1
+        const year = now.getFullYear();
+
+        // Return in DDMMYYYY format
+        return `${day}/${month}/${year}`;
+    }
+</script>
+</body>
+</html>
