@@ -176,6 +176,44 @@
                 padding: 10px;
             }
         }
+    
+    .shortcut-chart {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #1f1f1f; /* Matches the form background */
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.shortcut-chart h3 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #64ffda; /* Light cyan for heading */
+    text-align: center;
+}
+
+.shortcut-chart ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.shortcut-chart li {
+    padding: 8px 12px;
+    background-color: #333;
+    color: #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    display: inline-block;
+    font-weight: bold;
+    cursor: default;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
     </style>
 </head>
 <body>
@@ -188,22 +226,33 @@
             <h2>Remaining Balance: <span id="remaining-balance">0.00</span></h2>
         </div>
         <form id="expense-form">
+
+            
+            
             <div class="form-group">
-                <label for="type">Type:</label>
-                <div class="radio-group">
-                    <input type="radio" id="income" name="type" value="Income" checked>
-                    <label for="income">Income</label>
-                    <input type="radio" id="expense" name="type" value="Expense">
-                    <label for="expense">Expense</label>
-                </div>
-            </div>
-            <div class="form-group">
+                
+                <div class="shortcut-chart">
+    <h3>Shortcut Chart</h3>
+    <ul id="shortcut-list">
+        <!-- Shortcuts will be dynamically added here -->
+    </ul>
+</div>
                 <label for="description">Description:</label>
                 <input type="text" id="description" placeholder="Enter description" required>
             </div>
             <div class="form-group">
                 <label for="amount">Amount:</label>
                 <input type="number" id="amount" placeholder="Enter amount" required>
+            </div>
+<div class="form-group">
+    <label for="type">Type:</label>
+    <div class="radio-group">
+        <input type="radio" id="expense" name="type" value="Expense" checked>
+        <label for="expense">Expense</label>
+        <input type="radio" id="income" name="type" value="Income">
+        <label for="income">Income</label>
+    </div>
+</div>
             </div>
             <button type="submit">Add</button>
         </form>
@@ -227,6 +276,7 @@
         <option value="Account 1">2005 (P-pay)</option>
         <option value="Account 2">7907 (G-pay)</option>
     </select>
+    
 
     <script>
         let remainingBalanceAccount1 = 0;
@@ -361,6 +411,41 @@
             localStorage.setItem(currentAccount + "Transactions", JSON.stringify(transactions));
             loadTransactions();
         }
+    
+    // Predefined shortcuts for descriptions
+const descriptionShortcuts = {
+    "1": "evening snacks",
+    "2": "kachori,samosa",
+    "3": "Self transfer",
+    "4": "mess",
+    "5": "pg rent",
+    "6": "stationary",
+    "7": "pension",
+    "8": "debit/credit by family",
+};
+
+// Add event listener to detect shortcuts
+document.getElementById("description").addEventListener("input", function(e) {
+    const shortcut = e.target.value.trim();
+    if (descriptionShortcuts[shortcut]) {
+        e.target.value = descriptionShortcuts[shortcut];
+    }
+});
+    
+    // Populate the shortcut chart
+function populateShortcutChart() {
+    const shortcutList = document.getElementById("shortcut-list");
+    shortcutList.innerHTML = ""; // Clear existing list
+
+    for (const [key, value] of Object.entries(descriptionShortcuts)) {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${key}: ${value}`;
+        shortcutList.appendChild(listItem);
+    }
+}
+
+// Call this function on page load
+document.addEventListener("DOMContentLoaded", populateShortcutChart);
     </script>
 </body>
 </html>
