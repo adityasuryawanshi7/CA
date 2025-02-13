@@ -1,451 +1,504 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
-    <style>
-        /* Dark Theme with Improved Colors */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212; /* Darker background */
-            color: #e0e0e0; /* Light gray text */
-            margin: 0;
-            padding: 20px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <style>
+    /* CSS Variables for Light Theme */
+    :root {
+      --background: #252323;         /* Light background */
+      --container-bg: #282626;       /* White container */
+      --text-color: #f2f9de;         /* Dark text */
+      --accent: #3392f7;             /* Primary blue accent */
+      --accent-hover: #0056b3;       /* Darker blue for hover */
+      --input-bg: #494c50;           /* Light gray inputs */
+      --input-focus: #b7b4b4;        /* White background on focus */
+      --border: #797c80;             /* Light border for inputs */
+      --label-color: #495057;        /* Dark gray for labels */
+      --income-color: #28a745;       /* Green for income rows */
+      --expense-color: #dc3545;      /* Red for expense rows */
+    }
 
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-            background-color: #1f1f1f; /* Darker container background */
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
+    /* Global Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      animation: fadeInPage 1s ease-in-out;
+    }
 
-        h1, h2 {
-            text-align: center;
-            color: #64ffda; /* Light cyan color */
-            margin-bottom: 25px;
-        }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background-color: var(--container-bg);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
 
-        h2 span {
-            color: #00bfae; /* A slightly different cyan */
-        }
+    h1, h2 {
+      text-align: center;
+      color: var(--accent);
+      margin-bottom: 25px;
+    }
 
-        form, .balance {
-            margin-bottom: 20px;
-        }
+    h2 span {
+      color: var(--accent-hover);
+    }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+    form, .balance {
+      margin-bottom: 20px;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #b0bec5; /* Light grayish blue for labels */
-        }
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-        input, select, button {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-            border-radius: 8px;
-            border: 1px solid #7f8c8d;
-            background-color: #333; /* Dark input fields */
-            color: #e0e0e0; /* Light gray text */
-            outline: none;
-        }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: var(--label-color);
+    }
 
-        input:focus, select:focus, button:focus {
-            border-color: #64ffda; /* Highlight color */
-            background-color: #444;
-        }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      outline: none;
+      transition: all 0.3s ease;
+    }
 
-        button {
-            background-color: #64ffda; /* Light cyan for buttons */
-            color: #121212; /* Dark text on button */
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            padding: 12px;
-        }
+    input:focus, select:focus, button:focus {
+      border-color: var(--accent);
+      background-color: var(--input-focus);
+    }
 
-        button:hover {
-            background-color: #00bfae; /* Darker cyan on hover */
-        }
+    button {
+      background-color: var(--accent);
+      color: var(--container-bg);
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: #121212; /* Dark table background */
-            max-height: 300px; /* Set max height for scrolling */
-            overflow-y: auto; /* Make it scrollable */
-            display: block;
-        }
+    button:hover {
+      background-color: var(--accent-hover);
+      transform: scale(1.05);
+    }
 
-        thead {
-            background-color: #64ffda; /* Light cyan header */
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: var(--container-bg);
+      max-height: 300px;
+      overflow-y: auto;
+      display: block;
+      animation: slideIn 0.8s ease-out;
+    }
 
-        th {
-            color: #121212;
-            padding: 12px;
-            text-align: center;
-        }
+    thead {
+      background-color: var(--accent);
+    }
 
-        td {
-            padding: 12px;
-            text-align: center;
-            border-top: 1px solid #444;
-        }
+    th {
+      color: var(--container-bg);
+      padding: 12px;
+      text-align: center;
+    }
 
-        td button {
-            background-color: #e74c3c; /* Red color for delete button */
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            padding: 8px 16px;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
+    td {
+      padding: 12px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
 
-        td button:hover {
-            background-color: #c0392b; /* Darker red on hover */
-            transform: scale(1.1); /* Slight grow effect */
-        }
+    td button {
+      background-color: var(--expense-color);
+      color: #211f1f;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 8px 16px;
+      transition: transform 0.3s ease;
+      font-weight: bold;
+    }
 
-        /* Income Type: Green Text */
-        tr.income td:nth-child(2), tr.income td:nth-child(3), tr.income td:nth-child(4), tr.income td:nth-child(5) {
-            color: #2ecc71; /* Green for income text */
-        }
+    td button:hover {
+      background-color: #c82333;
+      transform: scale(1.1);
+    }
 
-        /* Expense Type: Red Text */
-        tr.expense td:nth-child(2), tr.expense td:nth-child(3), tr.expense td:nth-child(4), tr.expense td:nth-child(5) {
-            color: #e74c3c; /* Red for expense text */
-        }
+    /* Income and Expense Row Colors */
+    tr.income td:nth-child(2),
+    tr.income td:nth-child(3),
+    tr.income td:nth-child(4),
+    tr.income td:nth-child(5) {
+      color: var(--income-color);
+    }
 
-        /* Radio button style */
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-        }
+    tr.expense td:nth-child(2),
+    tr.expense td:nth-child(3),
+    tr.expense td:nth-child(4),
+    tr.expense td:nth-child(5) {
+      color: var(--expense-color);
+    }
 
-        .radio-group input[type="radio"] {
-            display: none; /* Hide default radio button appearance */
-        }
+    /* Radio Button Style */
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .radio-group label {
-            padding: 10px 20px;
-            background-color: #333;
-            border-radius: 50px; /* Circular pill shape */
-            cursor: pointer;
-            color: #e0e0e0;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
+    .radio-group input[type="radio"] {
+      display: none;
+    }
 
-        .radio-group input[type="radio"]:checked + label {
-            background-color: #64ffda; /* Highlight the selected option */
-            color: #121212;
-        }
+    .radio-group label {
+      padding: 10px 20px;
+      background-color: var(--input-bg);
+      border-radius: 50px;
+      cursor: pointer;
+      color: var(--text-color);
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.2s;
+    }
 
-        .radio-group label:hover {
-            background-color: #444;
-        }
+    .radio-group input[type="radio"]:checked + label {
+      background-color: var(--accent);
+      color: var(--container-bg);
+      transform: scale(1.05);
+    }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
+    .radio-group label:hover {
+      background-color: var(--input-focus);
+    }
 
-            table {
-                font-size: 14px;
-            }
-
-            input, select, button {
-                padding: 10px;
-            }
-        }
-    
+    /* Shortcut Chart Styles */
     .shortcut-chart {
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #1f1f1f; /* Matches the form background */
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: var(--input-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.8s ease-in-out;
+    }
 
-.shortcut-chart h3 {
-    margin: 0;
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #64ffda; /* Light cyan for heading */
-    text-align: center;
-}
+    .shortcut-chart h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: var(--accent);
+      text-align: center;
+    }
 
-.shortcut-chart ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-}
+    .shortcut-chart ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
 
-.shortcut-chart li {
-    padding: 8px 12px;
-    background-color: #333;
-    color: #e0e0e0;
-    border-radius: 6px;
-    font-size: 14px;
-    display: inline-block;
-    font-weight: bold;
-    cursor: default;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-}
-    </style>
+    .shortcut-chart li {
+      padding: 8px 12px;
+      background-color: var(--container-bg);
+      color: var(--text-color);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: default;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .shortcut-chart li:hover {
+      transform: scale(1.05);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      table {
+        font-size: 14px;
+      }
+      input, button, select {
+        padding: 10px;
+      }
+      select {
+        margin-top: 30px;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInPage {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Expense & Income Tracker</h1>
-        <div class="balance">
-            <label for="starting-balance">Starting Balance:</label>
-            <input type="number" id="starting-balance" placeholder="Enter starting balance" />
-            <button id="set-balance">Set Balance</button>
-            <h2>Remaining Balance: <span id="remaining-balance">0.00</span></h2>
+  <div class="container">
+    <h1>Expense & Income Tracker</h1>
+    <div class="balance">
+      <label for="starting-balance">Starting Balance:</label>
+      <input type="number" id="starting-balance" placeholder="Enter starting balance" />
+      <button id="set-balance">Set Balance</button>
+      <h2>Remaining Balance: <span id="remaining-balance">0.00</span></h2>
+    </div>
+    <form id="expense-form">
+      <div class="form-group">
+        <div class="shortcut-chart">
+          <h3>Shortcut Chart</h3>
+          <ul id="shortcut-list">
+            <!-- Shortcuts will be dynamically added here -->
+          </ul>
         </div>
-        <form id="expense-form">
+        <label for="description">Description:</label>
+        <input type="text" id="description" placeholder="Enter description" required />
+      </div>
+      <div class="form-group">
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" placeholder="Enter amount" required />
+      </div>
+      <div class="form-group">
+        <label for="type">Type:</label>
+        <div class="radio-group">
+          <input type="radio" id="expense" name="type" value="Expense" checked />
+          <label for="expense">Expense</label>
+          <input type="radio" id="income" name="type" value="Income" />
+          <label for="income">Income</label>
+        </div>
+      </div>
+      <button type="submit">Add</button>
+    </form>
+    <h2>Transaction List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Remaining Balance</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="transaction-list"></tbody>
+    </table>
+  </div>
 
-            
-            
-            <div class="form-group">
-                
-                <div class="shortcut-chart">
-    <h3>Shortcut Chart</h3>
-    <ul id="shortcut-list">
-        <!-- Shortcuts will be dynamically added here -->
-    </ul>
-</div>
-                <label for="description">Description:</label>
-                <input type="text" id="description" placeholder="Enter description" required>
-            </div>
-            <div class="form-group">
-                <label for="amount">Amount:</label>
-                <input type="number" id="amount" placeholder="Enter amount" required>
-            </div>
-<div class="form-group">
-    <label for="type">Type:</label>
-    <div class="radio-group">
-        <input type="radio" id="expense" name="type" value="Expense" checked>
-        <label for="expense">Expense</label>
-        <input type="radio" id="income" name="type" value="Income">
-        <label for="income">Income</label>
-    </div>
-</div>
-            </div>
-            <button type="submit">Add</button>
-        </form>
-        <h2>Transaction List</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date & Time</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Remaining Balance</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="transaction-list"></tbody>
-        </table>
-    </div>
-    
-    <select id="account-select">
-        <option value="Account 1">2005 (P-pay)</option>
-        <option value="Account 2">7907 (G-pay)</option>
-    </select>
-    
+  <select id="account-select">
+    <option value="Account 1">2005 (P-pay)</option>
+    <option value="Account 2">7907 (G-pay)</option>
+  </select>
 
-    <script>
-        let remainingBalanceAccount1 = 0;
-        let remainingBalanceAccount2 = 0;
-        let currentAccount = 'Account 1'; // Default selected account
+  <script>
+    let remainingBalanceAccount1 = 0;
+    let remainingBalanceAccount2 = 0;
+    let currentAccount = 'Account 1'; // Default selected account
 
-        // On page load, load balances and transactions for selected account
-        document.addEventListener("DOMContentLoaded", () => {
-            remainingBalanceAccount1 = parseFloat(localStorage.getItem("remainingBalanceAccount1")) || 0;
-            remainingBalanceAccount2 = parseFloat(localStorage.getItem("remainingBalanceAccount2")) || 0;
-            updateBalanceDisplay();
-            loadTransactions();
-        });
+    // On page load, load balances and transactions for selected account
+    document.addEventListener("DOMContentLoaded", () => {
+      remainingBalanceAccount1 = parseFloat(localStorage.getItem("remainingBalanceAccount1")) || 0;
+      remainingBalanceAccount2 = parseFloat(localStorage.getItem("remainingBalanceAccount2")) || 0;
+      updateBalanceDisplay();
+      loadTransactions();
+    });
 
-        // Account selection dropdown event
-        document.getElementById("account-select").addEventListener("change", (e) => {
-            currentAccount = e.target.value;
-            updateBalanceDisplay();
-            loadTransactions();
-        });
+    // Account selection dropdown event
+    document.getElementById("account-select").addEventListener("change", (e) => {
+      currentAccount = e.target.value;
+      updateBalanceDisplay();
+      loadTransactions();
+    });
 
-        // Update balance display based on selected account
-        function updateBalanceDisplay() {
-            if (currentAccount === 'Account 1') {
-                document.getElementById("remaining-balance").textContent = remainingBalanceAccount1.toFixed(2);
-            } else {
-                document.getElementById("remaining-balance").textContent = remainingBalanceAccount2.toFixed(2);
-            }
-        }
-
-        // Set the initial balance for selected account
-        document.getElementById("set-balance").addEventListener("click", () => {
-            const startingBalance = parseFloat(document.getElementById("starting-balance").value);
-            if (!isNaN(startingBalance)) {
-                if (currentAccount === 'Account 1') {
-                    remainingBalanceAccount1 = startingBalance;
-                    saveRemainingBalance();
-                } else {
-                    remainingBalanceAccount2 = startingBalance;
-                    saveRemainingBalance();
-                }
-                resetTransactions();
-                }
-        });
-
-        // Save remaining balance to localStorage
-        function saveRemainingBalance() {
-            if (currentAccount === 'Account 1') {
-                localStorage.setItem("remainingBalanceAccount1", remainingBalanceAccount1);
-            } else {
-                localStorage.setItem("remainingBalanceAccount2", remainingBalanceAccount2);
-            }
-            updateBalanceDisplay();
-        }
-
-        // Reset transactions when setting a new balance
-        function resetTransactions() {
-            document.getElementById("transaction-list").innerHTML = '';
-            localStorage.setItem(currentAccount + "Transactions", JSON.stringify([]));
-        }
-
-        // Add transaction to the table and update balance
-        document.getElementById("expense-form").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const type = document.querySelector('input[name="type"]:checked').value;
-            const description = document.getElementById("description").value;
-            const amount = parseFloat(document.getElementById("amount").value);
-
-            if (description && !isNaN(amount)) {
-                let transaction = {
-                    date: new Date().toLocaleString(),
-                    type: type,
-                    description: description,
-                    amount: amount,
-                    remainingBalance: currentAccount === 'Account 1' ? remainingBalanceAccount1 : remainingBalanceAccount2
-                };
-
-                // Update the balance
-                if (type === 'Income') {
-                    if (currentAccount === 'Account 1') {
-                        remainingBalanceAccount1 += amount;
-                    } else {
-                        remainingBalanceAccount2 += amount;
-                    }
-                } else if (type === 'Expense') {
-                    if (currentAccount === 'Account 1') {
-                        remainingBalanceAccount1 -= amount;
-                    } else {
-                        remainingBalanceAccount2 -= amount;
-                    }
-                }
-
-                // Save updated balance
-                saveRemainingBalance();
-
-                // Add the transaction to the list
-                let transactions = JSON.parse(localStorage.getItem(currentAccount + "Transactions")) || [];
-                transactions.push(transaction);
-                localStorage.setItem(currentAccount + "Transactions", JSON.stringify(transactions));
-
-                loadTransactions();
-            }
-        });
-
-        // Load transactions from localStorage
-        function loadTransactions() {
-            let transactions = JSON.parse(localStorage.getItem(currentAccount + "Transactions")) || [];
-            const transactionList = document.getElementById("transaction-list");
-            transactionList.innerHTML = '';
-
-            transactions.forEach((transaction, index) => {
-                const row = document.createElement("tr");
-                row.classList.add(transaction.type.toLowerCase()); // 'income' or 'expense'
-
-                row.innerHTML = `
-                    <td>${transaction.date}</td>
-                    <td>${transaction.type}</td>
-                    <td>${transaction.description}</td>
-                    <td>${transaction.amount.toFixed(2)}</td>
-                    <td>${transaction.remainingBalance.toFixed(2)}</td>
-                    <td><button onclick="deleteTransaction(${index})">Delete</button></td>
-                `;
-
-                transactionList.appendChild(row);
-            });
-        }
-
-        // Delete transaction
-        function deleteTransaction(index) {
-            let transactions = JSON.parse(localStorage.getItem(currentAccount + "Transactions"));
-            transactions.splice(index, 1);
-            localStorage.setItem(currentAccount + "Transactions", JSON.stringify(transactions));
-            loadTransactions();
-        }
-    
-    // Predefined shortcuts for descriptions
-const descriptionShortcuts = {
-    "1": "evening snacks",
-    "2": "kachori,samosa",
-    "3": "Self transfer",
-    "4": "mess",
-    "5": "pg rent",
-    "6": "stationary",
-    "7": "pension",
-    "8": "debit/credit by family",
-};
-
-// Add event listener to detect shortcuts
-document.getElementById("description").addEventListener("input", function(e) {
-    const shortcut = e.target.value.trim();
-    if (descriptionShortcuts[shortcut]) {
-        e.target.value = descriptionShortcuts[shortcut];
+    // Update balance display based on selected account
+    function updateBalanceDisplay() {
+      if (currentAccount === "Account 1") {
+        document.getElementById("remaining-balance").textContent = remainingBalanceAccount1.toFixed(2);
+      } else {
+        document.getElementById("remaining-balance").textContent = remainingBalanceAccount2.toFixed(2);
+      }
     }
-});
-    
-    // Populate the shortcut chart
-function populateShortcutChart() {
-    const shortcutList = document.getElementById("shortcut-list");
-    shortcutList.innerHTML = ""; // Clear existing list
 
-    for (const [key, value] of Object.entries(descriptionShortcuts)) {
+    // Set the initial balance for selected account
+    document.getElementById("set-balance").addEventListener("click", () => {
+      const startingBalance = parseFloat(document.getElementById("starting-balance").value);
+      if (!isNaN(startingBalance)) {
+        if (currentAccount === "Account 1") {
+          remainingBalanceAccount1 = startingBalance;
+        } else {
+          remainingBalanceAccount2 = startingBalance;
+        }
+        saveRemainingBalance();
+        resetTransactions();
+      }
+    });
+
+    // Save remaining balance to localStorage
+    function saveRemainingBalance() {
+      if (currentAccount === "Account 1") {
+        localStorage.setItem("remainingBalanceAccount1", remainingBalanceAccount1);
+      } else {
+        localStorage.setItem("remainingBalanceAccount2", remainingBalanceAccount2);
+      }
+      updateBalanceDisplay();
+    }
+
+    // Reset transactions when setting a new balance
+    function resetTransactions() {
+      document.getElementById("transaction-list").innerHTML = "";
+      localStorage.setItem(currentAccount + "Transactions", JSON.stringify([]));
+    }
+
+    // Add transaction to the table and update balance
+    document.getElementById("expense-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const type = document.querySelector('input[name="type"]:checked').value;
+      const description = document.getElementById("description").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if (description && !isNaN(amount)) {
+        let transaction = {
+          date: new Date().toLocaleString(),
+          type: type,
+          description: description,
+          amount: amount,
+          remainingBalance: currentAccount === "Account 1" ? remainingBalanceAccount1 : remainingBalanceAccount2
+        };
+
+        // Update the balance
+        if (type === "Income") {
+          if (currentAccount === "Account 1") {
+            remainingBalanceAccount1 += amount;
+          } else {
+            remainingBalanceAccount2 += amount;
+          }
+        } else if (type === "Expense") {
+          if (currentAccount === "Account 1") {
+            remainingBalanceAccount1 -= amount;
+          } else {
+            remainingBalanceAccount2 -= amount;
+          }
+        }
+
+        // Save updated balance
+        saveRemainingBalance();
+
+        // Add the transaction to the list
+        let transactions = JSON.parse(localStorage.getItem(currentAccount + "Transactions")) || [];
+        transactions.push(transaction);
+        localStorage.setItem(currentAccount + "Transactions", JSON.stringify(transactions));
+
+        loadTransactions();
+      }
+    });
+
+    // Load transactions from localStorage
+    function loadTransactions() {
+      let transactions = JSON.parse(localStorage.getItem(currentAccount + "Transactions")) || [];
+      const transactionList = document.getElementById("transaction-list");
+      transactionList.innerHTML = "";
+
+      transactions.forEach((transaction, index) => {
+        const row = document.createElement("tr");
+        row.classList.add(transaction.type.toLowerCase()); // 'income' or 'expense'
+        row.innerHTML = `
+          <td>${transaction.date}</td>
+          <td>${transaction.type}</td>
+          <td>${transaction.description}</td>
+          <td>${transaction.amount.toFixed(2)}</td>
+          <td>${transaction.remainingBalance.toFixed(2)}</td>
+          <td><button onclick="deleteTransaction(${index})">Delete</button></td>
+        `;
+        transactionList.appendChild(row);
+      });
+    }
+
+    // Delete transaction
+    function deleteTransaction(index) {
+      let transactions = JSON.parse(localStorage.getItem(currentAccount + "Transactions"));
+      transactions.splice(index, 1);
+      localStorage.setItem(currentAccount + "Transactions", JSON.stringify(transactions));
+      loadTransactions();
+    }
+
+    // Predefined shortcuts for descriptions
+    const descriptionShortcuts = {
+      "1": "shortcuts",
+      "2": "shortcuts",
+      "3": "shortcuts",
+      "4": "shortcuts",
+      "5": "shortcuts",
+      "6": "shortcuts",
+      "7": "shortcuts",
+      "8": "shortcuts"
+    };
+
+    // Add event listener to detect shortcuts
+    document.getElementById("description").addEventListener("input", function(e) {
+      const shortcut = e.target.value.trim();
+      if (descriptionShortcuts[shortcut]) {
+        e.target.value = descriptionShortcuts[shortcut];
+      }
+    });
+
+    // Populate the shortcut chart
+    function populateShortcutChart() {
+      const shortcutList = document.getElementById("shortcut-list");
+      shortcutList.innerHTML = "";
+      for (const [key, value] of Object.entries(descriptionShortcuts)) {
         const listItem = document.createElement("li");
         listItem.textContent = `${key}: ${value}`;
         shortcutList.appendChild(listItem);
+      }
     }
-}
 
-// Call this function on page load
-document.addEventListener("DOMContentLoaded", populateShortcutChart);
-    </script>
+    // Call this function on page load
+    document.addEventListener("DOMContentLoaded", populateShortcutChart);
+  </script>
 </body>
 </html>
